@@ -1,10 +1,14 @@
 /* jshint esversion: 6 */
 
+// Array to hold selected cards
+let selectedCards = [];
+
 class Card {
 	constructor(image, matched, index) {
 		this.image = image; // String
 		this.matched = matched; // Boolean
-		this.index = index;
+		this.index = index;  // each pair of cards will have the same index# to compare for match
+		this.shuffledIndex = 0;  // the shuffled position in the deck
 	}
 }
 
@@ -42,6 +46,10 @@ function shuffle(array) {
 		array[currentIndex] = array[randomIndex];
 		array[randomIndex] = temporaryValue;
 	}
+	// Put shuffled position into card object so we can later hide image
+	for (let i = 0; i < array.length; i++){
+		array[i].shuffledIndex = i;
+	}
 
 	return array;
 }
@@ -51,10 +59,63 @@ function addImageToCards(){
 	cardImage.forEach(function(img, index){
 		img.setAttribute('src', 'img/' + cardList[index].image);
 	});
-	let cards = document.querySelectorAll('.card');
-	cards.forEach(function (card, index){
-		card.setAttribute('id', index);
-	});
+	// let cards = document.querySelectorAll('.card');
+	// cards.forEach(function (card, index){
+	// 	card.setAttribute('id', index);
+	// });
+}
+
+function cardClicked(event){
+	let card = event.target;
+	//console.log(card.nodeName);
+	if(card.nodeName == 'LI'){
+		//console.log('clicked a card');
+		//console.log(card.getAttribute('id'));
+		let cardIndex = card.getAttribute('id');
+		//console.log(cardList[cardIndex]);
+		displayCard(cardIndex);
+	}
+	//event.target.style.visibility = 'hidden';
+}
+
+function displayCard(cardIndex){
+	//Check if card is already matched. Id so, return
+	let card = cardList[cardIndex];
+	if (card.matched) {
+		return;
+	}
+	//Get image of card id that was clicked
+	let cardToShow = document.getElementById(cardIndex).getElementsByTagName('img')[0];
+	cardToShow.classList.add('show');
+	selectedCards.push(cardList[cardIndex]);
+	
+	// If two cards in array, then compare them for a match, else return
+	if(selectedCards.length == 2){
+		// If no match, hide card images, clear selected array
+		if(!compareCards()){
+			console.log('compare false');
+			console.log(selectedCards);
+			selectedCards.forEach(function (){
+				//console.log(cardList);
+				// TODO: selected cardlist is wrong, has identical cards
+				let cardToHide =  document.getElementById(cardIndex).getElementsByTagName('img')[0];
+				console.log(cardToHide);
+			});
+			selectedCards = [];
+		}
+	}
+}
+
+function compareCards(){
+	console.log('comparing');
+	if(selectedCards[0].index === selectedCards[1].index){
+		console.log('Match');
+		selectedCards[0].matched = selectedCards[1] = true;
+		return true;
+	} else {
+		// No match
+		return false;
+	}
 }
 
 /*
@@ -69,17 +130,7 @@ function addImageToCards(){
  */
 
 shuffle(cardList);
+//console.log(cardList);
 addImageToCards();
 const deck = document.querySelector('.deck');
-//console.log(deck);
-deck.addEventListener('click', function (event){
-	let card = event.target;
-	//console.log(card.nodeName);
-	if(card.nodeName == 'LI'){
-		console.log('clicked a card');
-		console.log(card.getAttribute('id'));
-		let cardID = card.getAttribute('id');
-		console.log(cardList[cardID]);
-	}
-	//event.target.style.visibility = 'hidden';
-});
+deck.addEventListener('click', cardClicked);

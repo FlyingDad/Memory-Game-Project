@@ -112,10 +112,23 @@ h1 {
 
 .card-image {
 	max-width: 75px;
-	display: none;
+	/* display: none; */
+	visibility: hidden;
+	opacity: 0;
 }
 
-.card-image.show{
-	display: block;
+.show{
+	/* display: block; */
+	/* animation: fade-in 1s; */
+	opacity: 1;
+	visibility: visible;
+	/* transition: opacity 0.3s; */
+}
+
+.hide{
+	/* display: block; */
+	opacity: 0;
+	visibility: hidden;
+	transition: visibility 0.3s, opacity 0.3s;
 }
 

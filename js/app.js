@@ -2,7 +2,7 @@
 
 // Array to hold selected cards
 let selectedCards = [];
-
+let comparingCards = false; //
 class Card {
 	constructor(image, matched, index) {
 		this.image = image; // String
@@ -66,6 +66,10 @@ function addImageToCards(){
 }
 
 function cardClicked(event){
+	if(comparingCards){
+		// clear previously selected cards and return
+		handleCardComparison();
+	}
 	let card = event.target;
 	//console.log(card.nodeName);
 	if(card.nodeName == 'LI'){
@@ -86,24 +90,35 @@ function displayCard(cardIndex){
 	}
 	//Get image of card id that was clicked
 	let cardToShow = document.getElementById(cardIndex).getElementsByTagName('img')[0];
+	cardToShow.classList.remove('hide');
 	cardToShow.classList.add('show');
 	selectedCards.push(cardList[cardIndex]);
-	
+	//console.log('pushing ' + selectedCards);
 	// If two cards in array, then compare them for a match, else return
 	if(selectedCards.length == 2){
-		// If no match, hide card images, clear selected array
-		if(!compareCards()){
-			console.log('compare false');
-			console.log(selectedCards);
-			selectedCards.forEach(function (){
-				//console.log(cardList);
-				// TODO: selected cardlist is wrong, has identical cards
-				let cardToHide =  document.getElementById(cardIndex).getElementsByTagName('img')[0];
-				console.log(cardToHide);
-			});
-			selectedCards = [];
-		}
+		comparingCards = true; 
 	}
+}
+
+function handleCardComparison(){
+// If no match, hide card images, clear selected array
+	if(!compareCards()){
+		//TODO Need to wait for click
+		console.log('compare false');
+		console.log(selectedCards);
+		selectedCards.forEach(function (card){
+			//console.log(cardList);
+			let cardToHide =  document.getElementById(card.shuffledIndex).getElementsByTagName('img')[0];
+			cardToHide.classList.remove('show');
+			cardToHide.classList.add('hide');
+			//console.log(cardToHide);
+			
+		});
+		selectedCards = [];
+	} else {
+		// keep images displayed, tag both cards as matched
+	}
+	comparingCards = false;
 }
 
 function compareCards(){

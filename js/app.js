@@ -2,7 +2,15 @@
 
 // Array to hold selected cards
 let selectedCards = [];
-let comparingCards = false; //
+let turnCounter = 0;
+let turnDisplay = document.querySelector('.moves');
+let restart = document.querySelector('.restart');
+let cardList = [];
+const images = ['crab.svg', 'dolphin.svg', 'fish.svg', 'lemonade.svg',
+'palm-trees.svg', 'sailboat.svg', 'snorkel.svg', 'sun.svg'];
+const deck = document.querySelector('.deck');
+restart.addEventListener('click', restartGame);
+
 class Card {
 	constructor(image, matched, index) {
 		this.image = image; // String
@@ -12,13 +20,11 @@ class Card {
 	}
 }
 
-const images = ['crab.svg', 'dolphin.svg', 'fish.svg', 'lemonade.svg',
-'palm-trees.svg', 'sailboat.svg', 'snorkel.svg', 'sun.svg'];
 //function sCard(symbol: any, matched: any): void
 /*
  * Create a list that holds all of your cards
  */
-let cardList = [];
+
 
 // Add 8sets of two identical cards
 // Index is used to compare cards for match
@@ -66,10 +72,10 @@ function addImageToCards(){
 }
 
 function cardClicked(event){
-	if(comparingCards){
-		// clear previously selected cards and return
-		handleCardComparison();
-	}
+	// if(comparingCards){
+	// 	// clear previously selected cards and return
+	// 	handleCardComparison();
+	// }
 	let card = event.target;
 	//console.log(card.nodeName);
 	if(card.nodeName == 'LI'){
@@ -96,7 +102,8 @@ function displayCard(cardIndex){
 	//console.log('pushing ' + selectedCards);
 	// If two cards in array, then compare them for a match, else return
 	if(selectedCards.length == 2){
-		comparingCards = true; 
+		updateMoveCount();
+		handleCardComparison();
 	}
 }
 
@@ -104,33 +111,98 @@ function handleCardComparison(){
 // If no match, hide card images, clear selected array
 	if(!compareCards()){
 		//TODO Need to wait for click
-		console.log('compare false');
-		console.log(selectedCards);
-		selectedCards.forEach(function (card){
-			//console.log(cardList);
-			let cardToHide =  document.getElementById(card.shuffledIndex).getElementsByTagName('img')[0];
-			cardToHide.classList.remove('show');
-			cardToHide.classList.add('hide');
-			//console.log(cardToHide);
-			
-		});
-		selectedCards = [];
+		//console.log('compare false');
+		//console.log(selectedCards);
+		setTimeout(hideSelectedCards, 300);		
 	} else {
-		// keep images displayed, tag both cards as matched
+		selectedCards = [];
+		if(checkForWin()){
+			// Give DOM time to update and show last card clicked
+			setTimeout(winGame, 500);
+			//winGame();
+		}
 	}
-	comparingCards = false;
+}
+
+function checkForWin(){
+	let win = true;
+	cardList.forEach(card => {
+		if (card.matched == false){
+			//console.log(card.matched);
+			win = false;
+		}
+	});
+	return win;
+}
+
+function hideSelectedCards(){
+	//console.log('hiding cards');
+	selectedCards.forEach(function (card){
+		//console.log(cardList);
+		let cardToHide =  document.getElementById(card.shuffledIndex).getElementsByTagName('img')[0];
+		cardToHide.classList.remove('show');
+		cardToHide.classList.add('hide');	
+	});
+	selectedCards = [];
 }
 
 function compareCards(){
-	console.log('comparing');
+	//console.log('comparing');
 	if(selectedCards[0].index === selectedCards[1].index){
-		console.log('Match');
-		selectedCards[0].matched = selectedCards[1] = true;
+		//console.log('Match');
+		selectedCards[0].matched = selectedCards[1].matched = true;
 		return true;
 	} else {
 		// No match
 		return false;
 	}
+}
+
+function updateMoveCount(){
+	turnCounter += 1;
+	console.log('Turns: ' + turnCounter);
+	let moveTxt = turnCounter == 1 ? ' Move' : ' Moves';
+	turnDisplay.innerHTML = turnCounter + moveTxt;
+}
+
+function winGame(){
+	//alert('you won');
+	let winbox = document.querySelector('.winner');
+	winbox.classList.add('show-win');
+	let wincount = document.querySelector('.win-count');
+	wincount.innerHTML = turnCounter;
+}
+
+function restartGame(){
+	console.log('restarting');
+	turnCounter = 0;
+	// Remove winbox if displayed
+	let winbox = document.querySelector('.winner');
+	winbox.classList.remove('show-win');
+	// shuffle the deck
+	//console.log(cardList);
+	hideAllCards();
+	//delay so card fade has time to fade, or you can see new cards briefly
+	setTimeout(function() {
+		shuffle(cardList);
+		addImageToCards();
+	},500);
+	resetCards();
+	turnDisplay.innerHTML = 'No Moves';
+}
+
+function hideAllCards(){
+	let cards = document.querySelectorAll('.card-image');
+	cards.forEach(function(card){
+		card.classList.remove('show');
+		card.classList.add('hide');
+	});
+}
+
+function resetCards(){
+	cardList.forEach(function(card){
+		card.matched = false;
+	});
 }
 
 /*
@@ -147,5 +219,4 @@ function compareCards(){
 shuffle(cardList);
 //console.log(cardList);
 addImageToCards();
-const deck = document.querySelector('.deck');
 deck.addEventListener('click', cardClicked);

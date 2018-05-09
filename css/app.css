@@ -106,7 +106,14 @@ h1, h2, h3 {
 .score-panel .stars li {
     list-style: none;
 		display: inline-block;
-		color: green;
+}
+
+.star-off {
+	color: rgb(173, 173, 173);
+}
+
+.star-on {
+	color: green;
 }
 
 .score-panel .restart {
@@ -141,10 +148,11 @@ h1, h2, h3 {
 	background: linear-gradient(160deg, #ffee01 0%, #f19204 100%);
 	float: left;
 	width: 60%;
+	max-width: 600px;;
 	position: absolute;
 	margin: 0 auto;
 	padding: 10px 20px;
-	top: 350px;
+	top: 260px;
 	z-index: 1;
 	border-radius: 10px;
 	text-align: center;
@@ -153,4 +161,18 @@ h1, h2, h3 {
 
 .winner.show-win{
 	visibility: visible;
+}
+
+#play-again {
+	background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+		font-size: 18px;
+		border-radius: 5px;
+		margin-bottom: 20px;
+		cursor: pointer;
 }

@@ -2,12 +2,14 @@
 
 // Array to hold selected cards
 const maxStars = 5;   // starting stars
-const starReductionInitial = 2; // start reducing at this ,any turns
-const starReductionCount = 2;  // reduce every two turns
+const starReductionInitial = 10; // start reducing at this ,any turns
+const starReductionCount = 4;  // reduce every two turns
 let selectedCards = [];
 let turnCounter = 0;
 let turnDisplay = document.querySelector('.moves');
 let restart = document.querySelector('.restart');
+let playAgainBtn = document.querySelector('#play-again');
+let winbox = document.querySelector('.winner');
 let cardList = [];
 let startTime, endTime;
 let starCount = maxStars;
@@ -15,6 +17,7 @@ const images = ['crab.svg', 'dolphin.svg', 'fish.svg', 'lemonade.svg',
 'palm-trees.svg', 'sailboat.svg', 'snorkel.svg', 'sun.svg'];
 const deck = document.querySelector('.deck');
 restart.addEventListener('click', restartGame);
+playAgainBtn.addEventListener('click', restartGame);
 
 class Card {
 	constructor(image, matched, index) {
@@ -183,12 +186,13 @@ function winGame(){
 	endTime = Date.now();
 	let gameTime = getGameTime();
 	// display win box
-	let winbox = document.querySelector('.winner');
 	winbox.classList.add('show-win');
 	let winCount = document.querySelector('.win-count');
 	winCount.innerHTML = turnCounter;
 	let winTime = document.querySelector('.win-time');
 	winTime.innerHTML = gameTime;
+	let starRating = document.querySelector('.star-rating');
+	starRating.innerHTML = starCount < 0 ?  0 : starCount;
 }
 
 function restartGame(){
@@ -206,9 +210,11 @@ function restartGame(){
 		addImageToCards();
 	},500);
 	resetCards();
-	resetStars();
 	turnDisplay.innerHTML = 'No Moves';
 	startTime = null;
+	starCount = maxStars;
+	resetStars();
+	winbox.classList.remove('show-win');
 }
 
 function hideAllCards(){
@@ -258,33 +264,38 @@ function checkStars(){
 }
 
 function removeStar(){
-	//let starList = document.querySelector('.stars');
-	//let liToRemove = document.querySelector()
-	//if(starList.childNodes[1]){
-		//console.log(starList.childNodes[0]);
-		//console.log(starList.childNodes[1]);
-		//starList.removeChild(li);
-	//}
-	let star = document.querySelector(".star");
-	if(star){
-		star.remove();
+	let starToRemove = document.querySelectorAll("li")[starCount-1];
+	if(starToRemove){
+		starToRemove.classList.remove('star-on');
+		starToRemove.classList.add('star-off');
 	}
+	// let star = document.querySelector(".star");
+	// if(star){
+	// 	star.remove();
+	// }
 }
 
 function resetStars(){
-	let starList = document.querySelector('.stars');
-	// remove any remaing stars
-	while(starList.firstChild){
-		starList.removeChild(starList.firstChild);
-	}
-	// create LI's and append to starlist
-	let node = document.createElement("LI"); 
-	let starHTML = '<i class="fa fa-star fa-2x"></i>';
-	for(let i = 0; i < maxStars; i++){
-		node.innerHTML += starHTML;
-	}
-	starList.appendChild(node);
-	console.log(starList);
+	let allStars = document.querySelectorAll("li");
+	allStars.forEach((star) => {
+		star.classList.remove('star-off');
+		star.classList.add('star-on');
+	});
+	
+
+	// let starList = document.querySelector('.stars');
+	// // remove any remaing stars
+	// while(starList.firstChild){
+	// 	starList.removeChild(starList.firstChild);
+	// }
+	// // create LI's and append to starlist
+	// let node = document.createElement("LI"); 
+	// let starHTML = '<i class="fa fa-star fa-2x"></i>';
+	// for(let i = 0; i < maxStars; i++){
+	// 	node.innerHTML += starHTML;
+	// }
+	// starList.appendChild(node);
+	// console.log(starList);
 }
 /*
  * set up the event listener for a card. If a card is clicked:

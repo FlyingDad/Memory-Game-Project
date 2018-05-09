@@ -1,11 +1,16 @@
 /* jshint esversion: 6 */
 
 // Array to hold selected cards
+const maxStars = 5;   // starting stars
+const starReductionInitial = 2; // start reducing at this ,any turns
+const starReductionCount = 2;  // reduce every two turns
 let selectedCards = [];
 let turnCounter = 0;
 let turnDisplay = document.querySelector('.moves');
 let restart = document.querySelector('.restart');
 let cardList = [];
+let startTime, endTime;
+let starCount = maxStars;
 const images = ['crab.svg', 'dolphin.svg', 'fish.svg', 'lemonade.svg',
 'palm-trees.svg', 'sailboat.svg', 'snorkel.svg', 'sun.svg'];
 const deck = document.querySelector('.deck');
@@ -72,10 +77,17 @@ function addImageToCards(){
 }
 
 function cardClicked(event){
-	// if(comparingCards){
-	// 	// clear previously selected cards and return
-	// 	handleCardComparison();
-	// }
+	
+	//testing
+	
+
+	// Start game timer
+	if (!startTime){
+		startTime = Date.now();
+	} else {
+		endTime = Date.now();
+	}
+
 	let card = event.target;
 	//console.log(card.nodeName);
 	if(card.nodeName == 'LI'){
@@ -160,17 +172,23 @@ function compareCards(){
 
 function updateMoveCount(){
 	turnCounter += 1;
-	console.log('Turns: ' + turnCounter);
+	//console.log('Now: ' + startTime);
 	let moveTxt = turnCounter == 1 ? ' Move' : ' Moves';
 	turnDisplay.innerHTML = turnCounter + moveTxt;
+	checkStars();
 }
 
 function winGame(){
-	//alert('you won');
+	// stop game timer
+	endTime = Date.now();
+	let gameTime = getGameTime();
+	// display win box
 	let winbox = document.querySelector('.winner');
 	winbox.classList.add('show-win');
-	let wincount = document.querySelector('.win-count');
-	wincount.innerHTML = turnCounter;
+	let winCount = document.querySelector('.win-count');
+	winCount.innerHTML = turnCounter;
+	let winTime = document.querySelector('.win-time');
+	winTime.innerHTML = gameTime;
 }
 
 function restartGame(){
@@ -188,7 +206,9 @@ function restartGame(){
 		addImageToCards();
 	},500);
 	resetCards();
+	resetStars();
 	turnDisplay.innerHTML = 'No Moves';
+	startTime = null;
 }
 
 function hideAllCards(){
@@ -205,6 +225,67 @@ function resetCards(){
 	});
 }
 
+function getGameTime(){
+	//console.log(endTime, typeof(endTime));
+	let diff = endTime - startTime;
+	// convert to seconds
+	diff /= 1000;
+	//console.log(endTime, startTime);
+	//console.log('Gametime: ' + diff/1000);
+	//let seconds = Math.floor(diff/1000);
+	let minutes = Math.floor(diff/60);
+	let seconds =  Math.floor(diff%60);
+	console.log(minutes,seconds);
+	if(minutes == 0){
+		return `${seconds.toString()} seconds`;
+		//return seconds.toString() + ' seconds';
+	} else if (minutes == 1) {
+		return `1 minute, ${seconds} seconds`;
+		//return '1 minute, ' + seconds.toString() + ' ' + seconds;
+	} else {
+		return `${minutes} minutes, ${seconds} seconds`;
+	}
+}
+
+function checkStars(){
+	if(turnCounter == starReductionInitial){
+		removeStar();
+		starCount --;
+	} else if(turnCounter > starReductionInitial && turnCounter % starReductionCount == 0){
+		removeStar();
+		starCount --;
+	}
+}
+
+function removeStar(){
+	//let starList = document.querySelector('.stars');
+	//let liToRemove = document.querySelector()
+	//if(starList.childNodes[1]){
+		//console.log(starList.childNodes[0]);
+		//console.log(starList.childNodes[1]);
+		//starList.removeChild(li);
+	//}
+	let star = document.querySelector(".star");
+	if(star){
+		star.remove();
+	}
+}
+
+function resetStars(){
+	let starList = document.querySelector('.stars');
+	// remove any remaing stars
+	while(starList.firstChild){
+		starList.removeChild(starList.firstChild);
+	}
+	// create LI's and append to starlist
+	let node = document.createElement("LI"); 
+	let starHTML = '<i class="fa fa-star fa-2x"></i>';
+	for(let i = 0; i < maxStars; i++){
+		node.innerHTML += starHTML;
+	}
+	starList.appendChild(node);
+	console.log(starList);
+}
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)

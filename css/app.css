@@ -105,13 +105,15 @@ h1, h2, h3 {
 
 .score-panel .stars li {
     list-style: none;
-    display: inline-block;
+		display: inline-block;
+		color: green;
 }
 
 .score-panel .restart {
     float: right;
-    cursor: pointer;
+		cursor: pointer;
 }
+
 
 .card-image {
 	max-width: 75px;

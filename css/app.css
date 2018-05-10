@@ -43,7 +43,8 @@ h1, h2, h3 {
 .deck {
     width: 660px;
     min-height: 680px;
-    background: linear-gradient(160deg, #02ccba 0%, #aa7ecd 100%);
+		background: linear-gradient(160deg, #02ccba 0%, #aa7ecd 100%);
+		/* background: linear-gradient(160deg, #010399 0%, #004403 100%); */
     padding: 32px;
     border-radius: 10px;
     box-shadow: 12px 15px 20px 0 rgba(46, 61, 73, 0.5);
@@ -57,8 +58,8 @@ h1, h2, h3 {
 .deck .card {
     height: 125px;
     width: 125px;
-    background: #2e3d49;
-    font-size: 0px;  
+    background: #1b1e47;
+    /* font-size: 0px;   */
    /* set to 0 for release */
     color: #ffffff;
     border-radius: 8px;
@@ -69,22 +70,22 @@ h1, h2, h3 {
     box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
 }
 
-.deck .card.open {
-    transform: rotateY(0);
+/* .deck .card.open {
+    transform: rotateY(10deg);
     background: #02b3e4;
     cursor: default;
 		font-size: 33px;	
-}
+} */
 
 /* .deck .card.show {
     font-size: 33px;
 } */
 
-.deck .card.match {
+/* .deck .card.match {
     cursor: default;
     background: #02ccba;
     font-size: 33px;
-}
+} */
 
 /*
  * Styles for the Score Panel
@@ -113,7 +114,7 @@ h1, h2, h3 {
 }
 
 .star-on {
-	color: green;
+	color :#aa7ecd;
 }
 
 .score-panel .restart {
@@ -135,6 +136,11 @@ h1, h2, h3 {
 	opacity: 1;
 	visibility: visible;
 	/* transition: opacity 0.3s; */
+	
+}
+
+.card-show {
+	animation: shake .4s cubic-bezier(.36,.07,.19,.97) both;
 }
 
 .hide{
@@ -175,4 +181,29 @@ h1, h2, h3 {
 		border-radius: 5px;
 		margin-bottom: 20px;
 		cursor: pointer;
+}
+
+/* from https://css-tricks.com/snippets/css/shake-css-keyframe-animation/ */
+@keyframes shake {
+  10%, 90% {
+		/* transform: translate3d(-1px, 0, 0); */
+		transform: rotate(1deg);
+  }
+  
+  /* 20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  } */
+
+  30%  {
+		/* transform: translate3d(-2px, 0, 0); */
+		transform: rotate(2deg);
+	}
+	
+	50% {
+		transform: rotate(0deg);
+	}
+
+  40%, 60% {
+    /* transform: translate3d(2px, 0, 0); */
+  }
 }

@@ -13,6 +13,8 @@ let winbox = document.querySelector('.winner');
 let cardList = [];
 let startTime, endTime;
 let starCount = maxStars;
+// used to disable click when showing cards to eliminate cheating
+let comparing = false; 
 const images = ['crab.svg', 'dolphin.svg', 'fish.svg', 'lemonade.svg',
 'palm-trees.svg', 'sailboat.svg', 'snorkel.svg', 'sun.svg'];
 const deck = document.querySelector('.deck');
@@ -28,25 +30,12 @@ class Card {
 	}
 }
 
-//function sCard(symbol: any, matched: any): void
-/*
- * Create a list that holds all of your cards
- */
-
-
-// Add 8sets of two identical cards
+// Add 8 sets of two identical cards
 // Index is used to compare cards for match
 for(let i = 0; i < 8; i++){
 	cardList.push(new Card(images[i], false, i));
 	cardList.push(new Card(images[i], false, i));
 }
-
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -70,37 +59,26 @@ function shuffle(array) {
 
 function addImageToCards(){
 	let cardImage = document.querySelectorAll('.card-image');
-	cardImage.forEach(function(img, index){
+	cardImage.forEach((img, index) => {
 		img.setAttribute('src', 'img/' + cardList[index].image);
 	});
-	// let cards = document.querySelectorAll('.card');
-	// cards.forEach(function (card, index){
-	// 	card.setAttribute('id', index);
-	// });
 }
 
 function cardClicked(event){
-	
-	//testing
-	
-
 	// Start game timer
 	if (!startTime){
 		startTime = Date.now();
 	} else {
 		endTime = Date.now();
 	}
-
-	let card = event.target;
-	//console.log(card.nodeName);
-	if(card.nodeName == 'LI'){
-		//console.log('clicked a card');
-		//console.log(card.getAttribute('id'));
-		let cardIndex = card.getAttribute('id');
-		//console.log(cardList[cardIndex]);
-		displayCard(cardIndex);
+	// can only click new cards once comparison is done and cards dissapear
+	if(!comparing){
+		let card = event.target;
+		if(card.nodeName == 'LI'){
+			let cardIndex = card.getAttribute('id');
+			displayCard(cardIndex);
+		}
 	}
-	//event.target.style.visibility = 'hidden';
 }
 
 function displayCard(cardIndex){
@@ -109,15 +87,18 @@ function displayCard(cardIndex){
 	if (card.matched) {
 		return;
 	}
+	// Shake the card
+	let selectedCard = document.getElementById(cardIndex);
+	selectedCard.classList.add('card-show');
 	//Get image of card id that was clicked
-	let cardToShow = document.getElementById(cardIndex).getElementsByTagName('img')[0];
+	let cardToShow = selectedCard.getElementsByTagName('img')[0];
 	cardToShow.classList.remove('hide');
 	cardToShow.classList.add('show');
 	selectedCards.push(cardList[cardIndex]);
-	//console.log('pushing ' + selectedCards);
 	// If two cards in array, then compare them for a match, else return
 	if(selectedCards.length == 2){
 		updateMoveCount();
+		comparing = true;
 		handleCardComparison();
 	}
 }
@@ -125,17 +106,14 @@ function displayCard(cardIndex){
 function handleCardComparison(){
 // If no match, hide card images, clear selected array
 	if(!compareCards()){
-		//TODO Need to wait for click
-		//console.log('compare false');
-		//console.log(selectedCards);
-		setTimeout(hideSelectedCards, 300);		
+		setTimeout(hideSelectedCards, 1000);		
 	} else {
 		selectedCards = [];
 		if(checkForWin()){
 			// Give DOM time to update and show last card clicked
 			setTimeout(winGame, 500);
-			//winGame();
 		}
+		comparing = false;
 	}
 }
 
@@ -143,7 +121,6 @@ function checkForWin(){
 	let win = true;
 	cardList.forEach(card => {
 		if (card.matched == false){
-			//console.log(card.matched);
 			win = false;
 		}
 	});
@@ -151,20 +128,20 @@ function checkForWin(){
 }
 
 function hideSelectedCards(){
-	//console.log('hiding cards');
-	selectedCards.forEach(function (card){
-		//console.log(cardList);
-		let cardToHide =  document.getElementById(card.shuffledIndex).getElementsByTagName('img')[0];
+	selectedCards.forEach((card) => {
+		let cardLi = document.getElementById(card.shuffledIndex);
+		cardLi.classList.remove('card-show');
+		let cardToHide =  cardLi.getElementsByTagName('img')[0];
 		cardToHide.classList.remove('show');
 		cardToHide.classList.add('hide');	
 	});
 	selectedCards = [];
+	comparing = false;
 }
 
 function compareCards(){
-	//console.log('comparing');
+	// Check for match
 	if(selectedCards[0].index === selectedCards[1].index){
-		//console.log('Match');
 		selectedCards[0].matched = selectedCards[1].matched = true;
 		return true;
 	} else {
@@ -175,7 +152,6 @@ function compareCards(){
 
 function updateMoveCount(){
 	turnCounter += 1;
-	//console.log('Now: ' + startTime);
 	let moveTxt = turnCounter == 1 ? ' Move' : ' Moves';
 	turnDisplay.innerHTML = turnCounter + moveTxt;
 	checkStars();
@@ -196,16 +172,13 @@ function winGame(){
 }
 
 function restartGame(){
-	console.log('restarting');
 	turnCounter = 0;
 	// Remove winbox if displayed
 	let winbox = document.querySelector('.winner');
 	winbox.classList.remove('show-win');
-	// shuffle the deck
-	//console.log(cardList);
 	hideAllCards();
 	//delay so card fade has time to fade, or you can see new cards briefly
-	setTimeout(function() {
+	setTimeout(() => {
 		shuffle(cardList);
 		addImageToCards();
 	},500);
@@ -215,33 +188,29 @@ function restartGame(){
 	starCount = maxStars;
 	resetStars();
 	winbox.classList.remove('show-win');
+	comparing = false;
 }
 
 function hideAllCards(){
 	let cards = document.querySelectorAll('.card-image');
-	cards.forEach(function(card){
+	cards.forEach(card => {
 		card.classList.remove('show');
 		card.classList.add('hide');
 	});
 }
 
 function resetCards(){
-	cardList.forEach(function(card){
+	cardList.forEach(card => {
 		card.matched = false;
 	});
 }
 
 function getGameTime(){
-	//console.log(endTime, typeof(endTime));
 	let diff = endTime - startTime;
 	// convert to seconds
 	diff /= 1000;
-	//console.log(endTime, startTime);
-	//console.log('Gametime: ' + diff/1000);
-	//let seconds = Math.floor(diff/1000);
 	let minutes = Math.floor(diff/60);
 	let seconds =  Math.floor(diff%60);
-	console.log(minutes,seconds);
 	if(minutes == 0){
 		return `${seconds.toString()} seconds`;
 		//return seconds.toString() + ' seconds';
@@ -269,10 +238,6 @@ function removeStar(){
 		starToRemove.classList.remove('star-on');
 		starToRemove.classList.add('star-off');
 	}
-	// let star = document.querySelector(".star");
-	// if(star){
-	// 	star.remove();
-	// }
 }
 
 function resetStars(){
@@ -281,34 +246,9 @@ function resetStars(){
 		star.classList.remove('star-off');
 		star.classList.add('star-on');
 	});
-	
-
-	// let starList = document.querySelector('.stars');
-	// // remove any remaing stars
-	// while(starList.firstChild){
-	// 	starList.removeChild(starList.firstChild);
-	// }
-	// // create LI's and append to starlist
-	// let node = document.createElement("LI"); 
-	// let starHTML = '<i class="fa fa-star fa-2x"></i>';
-	// for(let i = 0; i < maxStars; i++){
-	// 	node.innerHTML += starHTML;
-	// }
-	// starList.appendChild(node);
-	// console.log(starList);
 }
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
 
+// Main
 shuffle(cardList);
-//console.log(cardList);
 addImageToCards();
 deck.addEventListener('click', cardClicked);

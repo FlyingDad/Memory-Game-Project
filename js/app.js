@@ -1,9 +1,13 @@
 /* jshint esversion: 6 */
 
-// Array to hold selected cards
 const maxStars = 5;   // starting stars
 const starReductionInitial = 10; // start reducing at this ,any turns
 const starReductionCount = 4;  // reduce every two turns
+const images = ['crab.svg', 'dolphin.svg', 'fish.svg', 'lemonade.svg',
+'palm-trees.svg', 'sailboat.svg', 'snorkel.svg', 'sun.svg'];
+const deck = document.querySelector('.deck');
+
+// Array to hold selected cards
 let selectedCards = [];
 let turnCounter = 0;
 let turnDisplay = document.querySelector('.moves');
@@ -15,9 +19,7 @@ let startTime, endTime;
 let starCount = maxStars;
 // used to disable click when showing cards to eliminate cheating
 let comparing = false; 
-const images = ['crab.svg', 'dolphin.svg', 'fish.svg', 'lemonade.svg',
-'palm-trees.svg', 'sailboat.svg', 'snorkel.svg', 'sun.svg'];
-const deck = document.querySelector('.deck');
+
 restart.addEventListener('click', restartGame);
 playAgainBtn.addEventListener('click', restartGame);
 

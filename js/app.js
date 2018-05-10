@@ -1,8 +1,8 @@
 /* jshint esversion: 6 */
 
-const maxStars = 5;   // starting stars
-const starReductionInitial = 10; // start reducing at this ,any turns
-const starReductionCount = 4;  // reduce every two turns
+const maxStars = 3;   // starting stars
+const starReductionInitial = 2; // start reducing at this ,any turns
+const starReductionCount = 2;  // reduce every two turns
 const images = ['crab.svg', 'dolphin.svg', 'fish.svg', 'lemonade.svg',
 'palm-trees.svg', 'sailboat.svg', 'snorkel.svg', 'sun.svg'];
 const deck = document.querySelector('.deck');
@@ -228,7 +228,7 @@ function checkStars(){
 	if(turnCounter == starReductionInitial){
 		removeStar();
 		starCount --;
-	} else if(turnCounter > starReductionInitial && turnCounter % starReductionCount == 0){
+	} else if(turnCounter > starReductionInitial && turnCounter % starReductionCount == 0 && starCount > 1){
 		removeStar();
 		starCount --;
 	}

@@ -2,6 +2,7 @@
 [Rr]aw Images/
 [Ii]mg/
 [Tt]esting/
+test*
 assets/scss/bourbon/
 assets/scss/susy*
 node_modules/

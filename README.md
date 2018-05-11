@@ -45,7 +45,7 @@ Card images are from [Flaticon.com](https://www.flaticon.com/packs/summertime-ho
 
 > To get started...
 
-### Step 1
+#### Step 1
 
 - **Option 1**
     - 🍴 Fork this repo!
@@ -53,10 +53,10 @@ Card images are from [Flaticon.com](https://www.flaticon.com/packs/summertime-ho
 - **Option 2**
     - 👯 Clone this repo to your local machine using `https://github.com/FlyingDad/Memory-Game-Project.git`
 
-### Step 2
+#### Step 2
 
 - **HACK AWAY!** 🔨🔨🔨
 
-### Step 3
+#### Step 3
 
 - 🔃 Create a new pull request using <a href="https://github.com/FlyingDad/Memory-Game-Project/compare/" target="_blank">`https://github.com/FlyingDad/Memory-Game-Project/compare/`</a>.

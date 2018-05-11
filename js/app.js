@@ -1,11 +1,12 @@
 /* jshint esversion: 6 */
 
 const maxStars = 3;   // starting stars
-const starReductionInitial = 2; // start reducing at this ,any turns
-const starReductionCount = 2;  // reduce every two turns
+const starReductionInitial = 12; // start reducing at this ,any turns
+const starReductionCount = 4;  // reduce every two turns
 const images = ['crab.svg', 'dolphin.svg', 'fish.svg', 'lemonade.svg',
 'palm-trees.svg', 'sailboat.svg', 'snorkel.svg', 'sun.svg'];
 const deck = document.querySelector('.deck');
+const displayTimer = document.getElementById('timer-text');
 
 // Array to hold selected cards
 let selectedCards = [];
@@ -15,7 +16,7 @@ let restart = document.querySelector('.restart');
 let playAgainBtn = document.querySelector('#play-again');
 let winbox = document.querySelector('.winner');
 let cardList = [];
-let startTime, endTime;
+let startTime, endTime, gameTimer;
 let starCount = maxStars;
 // used to disable click when showing cards to eliminate cheating
 let comparing = false; 
@@ -70,6 +71,8 @@ function cardClicked(event){
 	// Start game timer
 	if (!startTime){
 		startTime = Date.now();
+		// Start game timer
+		timer();
 	} else {
 		endTime = Date.now();
 	}
@@ -161,15 +164,15 @@ function updateMoveCount(){
 
 function winGame(){
 	// stop game timer
-	endTime = Date.now();
-	let gameTime = getGameTime();
+	clearInterval(gameTimer);
+	const gameTimeText = getGameTime();
 	// display win box
 	winbox.classList.add('show-win');
-	let winCount = document.querySelector('.win-count');
+	const winCount = document.querySelector('.win-count');
 	winCount.innerHTML = turnCounter;
-	let winTime = document.querySelector('.win-time');
-	winTime.innerHTML = gameTime;
-	let starRating = document.querySelector('.star-rating');
+	const winTime = document.querySelector('.win-time');
+	winTime.innerHTML = gameTimeText;
+	const starRating = document.querySelector('.star-rating');
 	starRating.innerHTML = starCount < 0 ?  0 : starCount;
 }
 
@@ -191,6 +194,7 @@ function restartGame(){
 	resetStars();
 	winbox.classList.remove('show-win');
 	comparing = false;
+	displayGameTime(0);
 }
 
 function hideAllCards(){
@@ -215,10 +219,8 @@ function getGameTime(){
 	let seconds =  Math.floor(diff%60);
 	if(minutes == 0){
 		return `${seconds.toString()} seconds`;
-		//return seconds.toString() + ' seconds';
 	} else if (minutes == 1) {
 		return `1 minute, ${seconds} seconds`;
-		//return '1 minute, ' + seconds.toString() + ' ' + seconds;
 	} else {
 		return `${minutes} minutes, ${seconds} seconds`;
 	}
@@ -248,6 +250,24 @@ function resetStars(){
 		star.classList.remove('star-off');
 		star.classList.add('star-on');
 	});
+}
+
+function timer() {
+  // clear any existing timers
+  clearInterval(gameTimer);
+
+ gameTimer = setInterval(() => {
+		const now = Date.now();
+		gameTime = Math.floor((now - startTime)/1000);
+    displayGameTime(gameTime);
+  }, 1000);
+}
+
+function displayGameTime(seconds) {
+  const minutes = Math.floor(seconds / 60);
+	const remainderSeconds = seconds % 60;
+  const display = `${minutes}:${remainderSeconds < 10 ? '0' : '' }${remainderSeconds}`;
+	displayTimer.innerHTML = display;
 }
 
 // Main

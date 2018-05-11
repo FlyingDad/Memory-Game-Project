@@ -15,14 +15,14 @@ This is a Udacity Front End Dev Nanodegree project.
 * [Sources](#sources)
 * [Contributing](#contributing)
 
-# Requirements
+## Requirements
 Browser capable of running ECMAScript 6 (ES6)
 
-# Dependencies
+## Dependencies
 
 None
 
-# Installation
+## Installation
 
 1. Clone the following repo: 
   * git clone https://github.com/FlyingDad/Memory-Game-Project
@@ -31,16 +31,15 @@ None
 
 3. Play the game
 
-# Instructions
+## Instructions
 
-Click on two cards to reveal card images. Matching cards will remain visible. 
-When all cards are matched the game is over.
-
-Try to beat your time and star rating!
+1. Click on two cards to reveal card images. Matching cards will remain visible. 
+2. When all cards are matched the game is over.
+3. Try to beat your time and star rating!
 
 Enjoy.
 
-# Sources
+## Sources
 Card images are from [Flaticon.com](https://www.flaticon.com/packs/summertime-holidays)
 # Contributing
 

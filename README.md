@@ -1,3 +1,5 @@
+![](https://img.shields.io/badge/JavaScript-ES6-green.svg)
+
 # Memory Game Project
 
 This is a Udacity Front End Dev Nanodegree project.
@@ -6,9 +8,28 @@ This is a Udacity Front End Dev Nanodegree project.
 
 ## Table of Contents
 
+* [Requirements](#requirements)
+* [Dependencies](#dependencies)
+* [Installation](#installation)
 * [Instructions](#instructions)
+* [Sources](#sources)
 * [Contributing](#contributing)
 
+# Requirements
+Browser capable of running ECMAScript 6 (ES6)
+
+# Dependencies
+
+None
+
+# Installation
+
+1. Clone the following repo: 
+  * git clone https://github.com/FlyingDad/Memory-Game-Project
+
+2. Load index.html in browser.
+
+3. Play the game
 
 # Instructions
 
@@ -19,6 +40,8 @@ Try to beat your time and star rating!
 
 Enjoy.
 
+# Sources
+Card images are from [Flaticon.com](https://www.flaticon.com/packs/summertime-holidays)
 # Contributing
 
 > To get started...
@@ -29,7 +52,7 @@ Enjoy.
     - 🍴 Fork this repo!
 
 - **Option 2**
-    - 👯 Clone this repo to your local machine using `https://github.com/joanaz/HireDot2.git`
+    - 👯 Clone this repo to your local machine using `https://github.com/FlyingDad/Memory-Game-Project.git`
 
 ### Step 2
 

@@ -47,15 +47,15 @@ Card images are from [Flaticon.com](https://www.flaticon.com/packs/summertime-ho
 
 #### Step 1
 
-- **Option 1**
+- *Option 1*
     - 🍴 Fork this repo!
 
-- **Option 2**
+- *Option 2*
     - 👯 Clone this repo to your local machine using `https://github.com/FlyingDad/Memory-Game-Project.git`
 
 #### Step 2
 
-- **HACK AWAY!** 🔨🔨🔨
+- *HACK AWAY!* 🔨🔨🔨
 
 #### Step 3
 

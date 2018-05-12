@@ -18,9 +18,14 @@ This is a Udacity Front End Dev Nanodegree project.
 ## Requirements
 Browser capable of running ECMAScript 6 (ES6)
 
-## Dependencies
+## Dependencies  
 
-None
+Font: [Font Awesome v4.7.0](https://fontawesome.com/v4.7.0/)  
+Font: [Google Fonts - Roboto](https://fonts.google.com/specimen/Roboto)  
+Animation: [CSS Tricks Keyfeame Animation](https://css-tricks.com/snippets/css/shake-css-keyframe-animation/)  
+Shuffle Function: [Stack Overflow](http://stackoverflow.com/a/2450976)  
+Timer Functionality: [Wes Bos - Jacascript 30](https://github.com/wesbos/JavaScript30/tree/master/29%20-%20Countdown%20Timer)  
+Responsive Web Design: [w3schools.com @media Rule](https://www.w3schools.com/cssref/css3_pr_mediaquery.asp)  
 
 ## Installation
 
